@@ -65,4 +65,4 @@ function seedUserCollection() {
 seedUserCollection();
 
 
-module.export = UserModel;
+module.exports = UserModel;
