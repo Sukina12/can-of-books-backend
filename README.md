@@ -30,9 +30,21 @@ Name of feature:  connecting your front end to an Express server
 
 Estimate of time needed to complete:2 hours
 
-Start time:2:30
+Start time:2:30 pm
 
-Finish time:5:30
+Finish time:5:30 pm
 
 Actual time needed to complete:3 hours
+
+
+********************************************************************************************************************
+Name of feature:  adding and deleting data in mongo from front-end
+
+Estimate of time needed to complete:2 hours
+
+Start time:7:00 pm
+
+Finish time:9:00 pm
+
+Actual time needed to complete:2 hours
 
