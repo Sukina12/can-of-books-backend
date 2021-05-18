@@ -6,11 +6,12 @@ const cors = require('cors');
 // const jwt = require('jsonwebtoken');
 // const jwksClient = require('jwks-rsa');
 const mongoose = require('mongoose');
-const UserModel = require('./users.js');
+const UserModel = require('./modules/users.js');
 
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 const PORT = process.env.PORT || 8081;
 
 mongoose.connect('mongodb://127.0.0.1:27017/books',
@@ -32,11 +33,26 @@ function homepage(req, res) {
 
 app.get('/books', getBooksByUser);
 
+app.post('./book', createBooks);
+
 function getBooksByUser(req, res) {
   const { email } = req.query;
   UserModel.find ( {email: email} , function (err, userData) {
     if (err) res.send('didnt work');
     res.send(userData);
+  });
+}
+
+function createBooks (request,response){
+  const {userEmail,bookName,bookDescription,bookStatus}=request.body;
+  UserModel.find ({email : userEmail},(error,userData) =>{
+    userData[0].books.push({
+      name : bookName,
+      description : bookDescription,
+      status: bookStatus
+    });
+    userData.save();
+    response.send(userData[0].books);
   });
 }
 
