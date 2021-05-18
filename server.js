@@ -19,7 +19,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/books',
 
 // app.get('/test', (request, response) => {
 
-//   // TODO: 
+//   // TODO:
 //   // STEP 1: get the jwt from the headers
 //   // STEP 2. use the jsonwebtoken library to verify that it is a valid jwt
 //   // jsonwebtoken dock - https://www.npmjs.com/package/jsonwebtoken

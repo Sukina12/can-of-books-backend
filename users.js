@@ -62,7 +62,7 @@ function seedUserCollection() {
   sufian.save();
   sukina.save();
 }
-seedUserCollection();
+// seedUserCollection();
 
 
 module.exports = UserModel;
