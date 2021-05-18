@@ -33,26 +33,49 @@ function homepage(req, res) {
 
 app.get('/books', getBooksByUser);
 
-app.post('./book', createBooks);
+app.post('/books', createBooks);
 
 function getBooksByUser(req, res) {
   const { email } = req.query;
-  UserModel.find ( {email: email} , function (err, userData) {
+  UserModel.find({ email: email }, function (err, userData) {
     if (err) res.send('didnt work');
     res.send(userData);
   });
 }
 
-function createBooks (request,response){
-  const {userEmail,bookName,bookDescription,bookStatus}=request.body;
-  UserModel.find ({email : userEmail},(error,userData) =>{
+function createBooks(request, response) {
+  console.log(request.body);
+  const { email, bookName, bookDescription, bookStatus } = request.body;
+  UserModel.find({ email: email }, (error, userData) => {
+    console.log(userData);
     userData[0].books.push({
-      name : bookName,
-      description : bookDescription,
+      name: bookName,
+      description: bookDescription,
       status: bookStatus
     });
-    userData.save();
-    response.send(userData[0].books);
+    userData[0].save();
+    response.send(userData);
+  });
+}
+
+app.delete('/books/:index', deleteBooksForEmail);
+
+function deleteBooksForEmail(req, res) {
+
+  const index = Number(req.params.index);
+  console.log(req.params);
+
+  const { email } = req.query;
+  console.log(email);
+  UserModel.find({ email: email }, (err, userData) => {
+
+    const newBooksArr = userData[0].books.filter((user, idx) => {
+      return idx !== index;
+    });
+    userData[0].books = newBooksArr;
+    userData[0].save();
+
+    res.send(' Book deleted!');
   });
 }
 
