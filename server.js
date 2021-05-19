@@ -3,10 +3,9 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-// const jwt = require('jsonwebtoken');
-// const jwksClient = require('jwks-rsa');
 const mongoose = require('mongoose');
-const UserModel = require('./modules/users.js');
+const indexController = require ('./controller/index.controller');
+const booksController = require ('./controller/books.controller');
 
 
 const app = express();
@@ -18,65 +17,27 @@ mongoose.connect('mongodb://127.0.0.1:27017/books',
   { useNewUrlParser: true, useUnifiedTopology: true }
 );
 
-// app.get('/test', (request, response) => {
+app.get('/',indexController.homepage);
 
-//   // TODO: 
-//   // STEP 1: get the jwt from the headers
-//   // STEP 2. use the jsonwebtoken library to verify that it is a valid jwt
-//   // jsonwebtoken dock - https://www.npmjs.com/package/jsonwebtoken
-//   // STEP 3: to prove that everything is working correctly, send the opened jwt back to the front-end
-// })
-app.get('/', homepage);
-function homepage(req, res) {
-  res.send('Hello From Sufian and Sukina');
-}
 
-app.get('/books', getBooksByUser);
+// get data from specific email
+app.get('/books', booksController.getBooksByUser);
 
-app.post('/books', createBooks);
 
-function getBooksByUser(req, res) {
-  const { email } = req.query;
-  UserModel.find({ email: email }, function (err, userData) {
-    if (err) res.send('didnt work');
-    res.send(userData);
-  });
-}
 
-function createBooks(request, response) {
-  console.log(request.body);
-  const { email, bookName, bookDescription, bookStatus } = request.body;
-  UserModel.find({ email: email }, (error, userData) => {
-    console.log(userData);
-    userData[0].books.push({
-      name: bookName,
-      description: bookDescription,
-      status: bookStatus
-    });
-    userData[0].save();
-    response.send(userData);
-  });
-}
+// add new books to mongo
+app.post('/books',booksController.createBooks);
 
-app.delete('/books/:index', deleteBooksForEmail);
 
-function deleteBooksForEmail(req, res) {
+// delete data from mongo
+app.delete('/books/:index',booksController.deleteBooksForEmail);
 
-  const index = Number(req.params.index);
-  console.log(req.params);
 
-  const { email } = req.query;
-  console.log(email);
-  UserModel.find({ email: email }, (err, userData) => {
 
-    const newBooksArr = userData[0].books.filter((user, idx) => {
-      return idx !== index;
-    });
-    userData[0].books = newBooksArr;
-    userData[0].save();
+// update data in mongo
+app.put('/books/:index',booksController.updateBooksData);
 
-    res.send(' Book deleted!');
-  });
-}
 
+
+// listen to port
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
