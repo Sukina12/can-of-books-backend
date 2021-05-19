@@ -1,7 +1,7 @@
 'use strict';
 const UserModel = require('../modules/users.model');
 
-const getBooksByUser = async (req,res) => {
+const getBooksByUser = async (req, res) => {
   const { email } = req.query;
   console.log (email);
   await UserModel.find({ email: email }, function (err, userData) {
